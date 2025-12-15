@@ -1,32 +1,20 @@
-# _Sample project_
+## 10.1 LightSleepWithTimer
+**V nalogi smo izmerili čas v katerem je bil esp32S3 v načinu Light Sleep. Dodatno smo funkciji za začeteh spanja onemogočili štart dokler se ni spraznil predpomnilnik in dokončalo predhodno začeto printanje.**
 
-(See the README.md file in the upper level 'examples' directory for more information about examples.)
+S funkcijami modula [ESP Timer (High Resolution Timer)](https://docs.espressif.com/projects/esp-idf/en/release-v6.0/esp32s3/api-reference/system/esp_timer.html#) izmerimo trenutni čas.
 
-This is the simplest buildable example. The example is used by command `idf.py create-project`
-that copies the project to user specified path and set it's name. For more information follow the [docs page](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#start-a-new-project)
+glavna datoteka : `#include "esp_timer.h"`
+funkcije :  
+`int64_t esp_timer_get_time(void)`
 
+S funkcijami modula [Sleep Modes](https://docs.espressif.com/projects/esp-idf/en/release-v6.0/esp32s3/api-reference/system/sleep_modes.html#_CPPv421esp_light_sleep_startv) nastavimo trajanje spanja in start spanja.
+glavna datoteka : `#include "esp_sleep.h"`
+funkcije :
+`esp_sleep_enable_timer_wakeup(5000000);`
+`esp_light_sleep_start();`
 
-
-## How to use example
-We encourage the users to use the example as a template for the new projects.
-A recommended way is to follow the instructions on a [docs page](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#start-a-new-project).
-
-## Example folder contents
-
-The project **sample_project** contains one source file in C language [main.c](main/main.c). The file is located in folder [main](main).
-
-ESP-IDF projects are built using CMake. The project build configuration is contained in `CMakeLists.txt`
-files that provide set of directives and instructions describing the project's source files and targets
-(executable, library, or both). 
-
-Below is short explanation of remaining files in the project folder.
-
-```
-├── CMakeLists.txt
-├── main
-│   ├── CMakeLists.txt
-│   └── main.c
-└── README.md                  This is the file you are currently reading
-```
-Additionally, the sample project contains Makefile and component.mk files, used for the legacy Make based build system. 
-They are not used or needed when building with CMake and idf.py.
+Lahko se zgodi , da start spanja prekine izvajanje kode, ki je še v Bufferju. V našem primeru printanje. 
+To preprečimo z ukazom v modulu [UART](https://docs.espressif.com/projects/esp-idf/en/release-v6.0/esp32s3/api-reference/peripherals/uart.html) , ki onemogoči nadaljevanje kode dokler ne izprazni Bufferja. 
+glavna datoteka: `#include "driver/uart.h"`
+funkcije :
+`uart_wait_tx_idle_polling(CONFIG_ESP_CONSOLE_UART_NUM);`
