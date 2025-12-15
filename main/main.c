@@ -7,7 +7,7 @@
 #include "freertos/task.h"
 #include "esp_sleep.h"
 #include "esp_log.h"
-#include "esp32/rom/uart.h"
+//#include "esp32/rom/uart.h"
 
 
 void app_main(void)
