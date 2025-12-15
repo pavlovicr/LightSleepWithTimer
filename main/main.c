@@ -12,5 +12,15 @@
 
 void app_main(void)
 {
+ esp_sleep_enable_timer_wakeup(5000000);
+ printf("grem na tirolsko\n"); 
+
+int64_t prej = esp_timer_get_time();
+
+esp_light_sleep_start;
+
+int64_t sedaj = esp_timer_get_time();
+
+printf("prespal sem %lld mikrosekund\n", sedaj - prej);
 
 }
